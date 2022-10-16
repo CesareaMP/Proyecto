@@ -86,32 +86,29 @@ namespace Proyecto {
 		StreamReader^ din = File::OpenText(fileName);
 		String^ str = din->ReadLine();
 		int contador = 0;
-		while (str != nullptr) {	
-				String^ comas = str->Split(',')[contador];
-				String^ nombre = comas->Split('-')[0];
-				contador++;
-				String^ artista = "";
-				for (int i = nombre->Length + 1; i <= comas->Length - 1; i++)
-				{
-					artista += comas[i];
-				}
-				if (artista[artista->Length - 1] == ';')
-				{
-					str = nullptr;
-				}
-				for (int i = 0; i < artista->Length; i++)
-				{
-					artista += artista[i];
-				}
-				nueva_pila.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
-				
-			}
-			for (int i = 0; i < nueva_pila.Count() + 1; i++)
+		while (str != nullptr) {
+			String^ comas = str->Split(',')[contador];
+			String^ nombre = comas->Split('-')[0];
+			contador++;
+			String^ artista = "";
+			for (int i = nombre->Length + 1; i <= comas->Length - 1; i++)
 			{
-				listBox1->Items->Add(gcnew String(nueva_pila.Pop().c_str()));
+				artista += comas[i];
 			}
-			
-			
+			if (artista[artista->Length - 1] == ';')
+			{
+				artista = artista->Split(';')[0];
+				str = nullptr;
+			}
+			nueva_pila.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
+		}
+		listBox1->Items->Clear();
+		int iterador = nueva_pila.Count();
+		for (int i = 0; i < iterador; i++)
+		{
+			listBox1->Items->Add(gcnew String(nueva_pila.Pop().c_str()));
+		}
+
 	}
 	};
 }
