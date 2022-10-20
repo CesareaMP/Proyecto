@@ -3,7 +3,7 @@
 void Pila::Add(string a,string n)
 {
     Nodepi* aux = new Nodepi();//creacion de nodo auxiliar para guardado de datos
-    if (a=="")
+    if (a==" ")
     {
         aux->artista = "desconocido";
     }
@@ -35,3 +35,4 @@ int Pila::Count()
     }
     return contador;
 }
+
