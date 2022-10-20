@@ -16,6 +16,7 @@ namespace Proyecto {
 	Pila nueva_pila;
 	COLA nueva_cola;
 	LIST lista_original;
+	LIST lista_existente;
 
 	/// <summary>
 	/// Resumen de MyForm
@@ -220,6 +221,7 @@ namespace Proyecto {
 			this->button5->TabIndex = 12;
 			this->button5->Text = L"Agregar a pila";
 			this->button5->UseVisualStyleBackColor = true;
+			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
 			// button6
 			// 
@@ -237,7 +239,7 @@ namespace Proyecto {
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(160, 47);
 			this->button7->TabIndex = 14;
-			this->button7->Text = L"button7";
+			this->button7->Text = L"Exportar";
 			this->button7->UseVisualStyleBackColor = true;
 			// 
 			// button8
@@ -300,10 +302,9 @@ namespace Proyecto {
 			}
 			nueva_pila.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
 			lista_original.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
-			
+			lista_existente.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
 		}
 		list_muestreo->Items->Clear();
-		txt_reproduccion_actual->Text = gcnew String(nueva_pila.Pop().c_str());
 		int iterador = nueva_pila.Count();
 		for (int i = 0; i < iterador; i++)
 		{
@@ -312,12 +313,19 @@ namespace Proyecto {
 		
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (txt_nombre_cancion->Text!="")
+			if (txt_nombre_cancion->Text!="")
 		{
+			string pasar_datos = "";
 			nueva_cola.Add(msclr::interop::marshal_as<std::string>(txt_nombre_artista->Text), msclr::interop::marshal_as<std::string>(txt_nombre_cancion->Text));
+			if (txt_nombre_artista->Text=="")
+			{
+				txt_nombre_artista->Text = "desconocido";
+			}
+			pasar_datos = msclr::interop::marshal_as<std::string>(txt_nombre_cancion->Text) + "-" + msclr::interop::marshal_as<std::string>(txt_nombre_artista->Text);
 			txt_nombre_artista->Text = "";
 			txt_nombre_cancion->Text = "";
-			list_agregar->Items->Add(gcnew String(nueva_cola.Get_song().c_str()));
+			list_agregar->Items->Add(gcnew String(pasar_datos.c_str()));
+			/*list_agregar->Items->Add(gcnew String(nueva_cola.Get_song().c_str()));*/
 		}
 		else
 		{
@@ -332,6 +340,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 		list_muestreo->SelectedIndex = 0;
 		txt_reproduccion_actual->Text = Convert::ToString(list_muestreo->Text);
 		list_muestreo->Items->RemoveAt(0);
+		lista_existente.delete_last();
 	}
 	catch (Exception^e)
 	{
@@ -355,6 +364,25 @@ private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e
 		original += lista_original.Get(i)+ "\n";
 	}
 	MessageBox::Show(gcnew String(original.c_str()));
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	int iterador = nueva_cola.Count();
+	for (int i = 0; i < iterador; i++)
+	{
+		String^ todoget = gcnew String(nueva_cola.Get_song().c_str());
+		String^ cancion = todoget->Split('-')[0];
+		String^ artista = todoget->Split('-')[1];
+		nueva_pila.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(cancion));
+		lista_original.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(cancion));
+		lista_existente.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(cancion));
+	
+	}
+	list_agregar->Items->Clear();
+	list_muestreo->Items->Clear();
+	for (int i = 0; i < lista_existente.Count(); i++)
+	{
+		list_muestreo->Items->Add(gcnew String(lista_existente.Get(i).c_str()));
+	}
 }
 };
 }

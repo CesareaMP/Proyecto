@@ -24,7 +24,7 @@ void COLA::Add(string a, string c)
 string COLA::Get_song()
 {
 	Nodeco* aux = footer;
-	string ayn = footer->n_cancion+" - "+footer->artista;
+	string ayn = footer->n_cancion+"-"+footer->artista;
 	footer = footer->next;
 	return ayn;
 }
@@ -43,5 +43,38 @@ int COLA::Count()
 
 void COLA::delet(int index, int max)
 {
-
+	int contador = index-1;
+	Nodeco* siguiente = footer;
+	Nodeco* anterior = footer;
+	if (index==0)
+	{
+		footer = footer->next;
+	}
+	if (index==max)
+	{
+		while (index-1>=0)
+		{
+			anterior = anterior->next; 
+			index--;
+		}
+		header = anterior;
+	}
+	if (index==1)
+	{
+		header = footer;
+	}
+	else
+	{
+		while (index + 1 >= 0)
+		{
+			siguiente = siguiente->next;
+			index--;
+		}
+		while (contador >= 0)
+		{
+			anterior = anterior->next;
+			contador--;
+		}
+		anterior->next = siguiente;
+	}
 }

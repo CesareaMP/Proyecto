@@ -36,6 +36,11 @@ int LIST::Count()
 	return contador;
 }
 
+void LIST::delete_last()
+{
+	header = header->next;
+}
+
 void LIST::delete_list()
 {
 	header = nullptr;
