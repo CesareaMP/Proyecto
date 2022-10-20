@@ -3,7 +3,7 @@
 void COLA::Add(string a, string c)
 {
 	Nodeco* aux = new Nodeco();
-	if (a==" ")
+	if (a=="")
 	{
 		a = "desconocido";
 	}
@@ -39,4 +39,9 @@ int COLA::Count()
 		aux = aux->next;
 	}
 	return contador;
+}
+
+void COLA::delet(int index, int max)
+{
+
 }

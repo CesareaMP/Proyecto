@@ -13,6 +13,7 @@ public:
 	void Add(string, string);
 	string Get_song();
 	int Count();
+	void delet(int,int);
 private:
 	Nodeco* header = nullptr;
 	Nodeco* footer = nullptr;

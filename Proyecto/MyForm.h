@@ -1,6 +1,7 @@
 #pragma once
 #include "Pila.h";
 #include "Cola.h";
+#include "List.h";
 #include <msclr\marshal_cppstd.h>//libreria que permite convertir system::string a std::string y viceversa
 namespace Proyecto {
 
@@ -14,6 +15,7 @@ namespace Proyecto {
 	using namespace System::Media;
 	Pila nueva_pila;
 	COLA nueva_cola;
+	LIST lista_original;
 
 	/// <summary>
 	/// Resumen de MyForm
@@ -59,6 +61,10 @@ namespace Proyecto {
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Button^ button5;
+	private: System::Windows::Forms::Button^ button6;
+	private: System::Windows::Forms::Button^ button7;
+	private: System::Windows::Forms::Button^ button8;
 	protected:
 
 	private:
@@ -86,10 +92,15 @@ namespace Proyecto {
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// list_muestreo
 			// 
+			this->list_muestreo->Enabled = false;
 			this->list_muestreo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->list_muestreo->FormattingEnabled = true;
@@ -171,6 +182,7 @@ namespace Proyecto {
 			this->button2->TabIndex = 8;
 			this->button2->Text = L"Ordenar por Cancion";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
 			// button3
 			// 
@@ -200,11 +212,53 @@ namespace Proyecto {
 			this->label3->TabIndex = 11;
 			this->label3->Text = L"Reproduciendo";
 			// 
+			// button5
+			// 
+			this->button5->Location = System::Drawing::Point(199, 565);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(160, 47);
+			this->button5->TabIndex = 12;
+			this->button5->Text = L"Agregar a pila";
+			this->button5->UseVisualStyleBackColor = true;
+			// 
+			// button6
+			// 
+			this->button6->Location = System::Drawing::Point(25, 565);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(160, 47);
+			this->button6->TabIndex = 13;
+			this->button6->Text = L"Eliminar";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
+			// 
+			// button7
+			// 
+			this->button7->Location = System::Drawing::Point(687, 565);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(160, 47);
+			this->button7->TabIndex = 14;
+			this->button7->Text = L"button7";
+			this->button7->UseVisualStyleBackColor = true;
+			// 
+			// button8
+			// 
+			this->button8->Location = System::Drawing::Point(372, 97);
+			this->button8->Name = L"button8";
+			this->button8->Size = System::Drawing::Size(86, 42);
+			this->button8->TabIndex = 15;
+			this->button8->Text = L"Mostrar Original";
+			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(872, 571);
+			this->ClientSize = System::Drawing::Size(872, 733);
+			this->Controls->Add(this->button8);
+			this->Controls->Add(this->button7);
+			this->Controls->Add(this->button6);
+			this->Controls->Add(this->button5);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
@@ -245,6 +299,8 @@ namespace Proyecto {
 				str = nullptr;
 			}
 			nueva_pila.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
+			lista_original.Add(msclr::interop::marshal_as<std::string>(artista), msclr::interop::marshal_as<std::string>(nombre));
+			
 		}
 		list_muestreo->Items->Clear();
 		txt_reproduccion_actual->Text = gcnew String(nueva_pila.Pop().c_str());
@@ -256,6 +312,17 @@ namespace Proyecto {
 		
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (txt_nombre_cancion->Text!="")
+		{
+			nueva_cola.Add(msclr::interop::marshal_as<std::string>(txt_nombre_artista->Text), msclr::interop::marshal_as<std::string>(txt_nombre_cancion->Text));
+			txt_nombre_artista->Text = "";
+			txt_nombre_cancion->Text = "";
+			list_agregar->Items->Add(gcnew String(nueva_cola.Get_song().c_str()));
+		}
+		else
+		{
+			MessageBox::Show("Debe ingresar el nombre de la canción");
+		}
 	}
 private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -270,7 +337,24 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	{
 		//MessageBox::Show("No sea idiota ya no hay canciones");
 		txt_reproduccion_actual->Text = "";
+		lista_original.delete_list();
 	}
+}
+private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+	int index = list_agregar->SelectedIndex;
+	nueva_cola.delet(index, nueva_cola.Count()-1);
+	list_agregar->Items->Remove(list_agregar->SelectedItem);
+}
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+}
+private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
+	string original = "";
+	for (int i = 0; i < lista_original.Count(); i++)
+	{
+		original += lista_original.Get(i)+ "\n";
+	}
+	MessageBox::Show(gcnew String(original.c_str()));
 }
 };
 }
