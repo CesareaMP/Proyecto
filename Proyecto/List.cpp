@@ -17,7 +17,7 @@ void LIST::Add(string a, string c)
 			if (i==0)
 			{
 				switch (toupper(aux->artista[i]))
-				{
+				{	
 				case 'A':
 					aux->valor_artista += 1;
 					break;

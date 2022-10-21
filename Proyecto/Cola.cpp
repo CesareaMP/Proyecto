@@ -46,20 +46,20 @@ void COLA::delet(int index, int max)
 	int contador = index-1;
 	Nodeco* siguiente = footer;
 	Nodeco* anterior = footer;
-	if (index==0)
+	if (index == max)
 	{
-		footer = footer->next;
-	}
-	if (index==max)
-	{
-		while (index-1>=0)
+		while (index - 1 >= 0)
 		{
-			anterior = anterior->next; 
+			anterior = anterior->next;
 			index--;
 		}
 		header = anterior;
 	}
-	if (index==1)
+	else if (index==0)
+	{
+		footer = footer->next;
+	}
+	else if (index==1)
 	{
 		header = footer;
 	}
