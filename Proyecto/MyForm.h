@@ -2,6 +2,7 @@
 #include "Pila.h";
 #include "Cola.h";
 #include "List.h";
+#include <fstream>
 #include <msclr\marshal_cppstd.h>//libreria que permite convertir system::string a std::string y viceversa
 namespace Proyecto {
 
@@ -17,6 +18,9 @@ namespace Proyecto {
 	COLA nueva_cola;
 	LIST lista_original;
 	LIST lista_existente;
+	LIST lista_ordenada;
+	bool cancion = true;
+	bool artista = true;
 
 	/// <summary>
 	/// Resumen de MyForm
@@ -181,7 +185,7 @@ namespace Proyecto {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(143, 46);
 			this->button2->TabIndex = 8;
-			this->button2->Text = L"Ordenar por Cancion";
+			this->button2->Text = L"Ordenar por Cancion A<-->Z";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
@@ -191,8 +195,9 @@ namespace Proyecto {
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(130, 46);
 			this->button3->TabIndex = 9;
-			this->button3->Text = L"Ordenar por Artista";
+			this->button3->Text = L"Ordenar por Artista A<-->Z";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
 			// button4
 			// 
@@ -241,6 +246,7 @@ namespace Proyecto {
 			this->button7->TabIndex = 14;
 			this->button7->Text = L"Exportar";
 			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
 			// 
 			// button8
 			// 
@@ -256,7 +262,7 @@ namespace Proyecto {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(872, 733);
+			this->ClientSize = System::Drawing::Size(872, 630);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
@@ -355,7 +361,22 @@ private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e
 	list_agregar->Items->Remove(list_agregar->SelectedItem);
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-	
+	if (cancion==true)
+	{
+		cancion = false;
+		lista_existente.bubble_sort_cancion(cancion);
+	}
+	else
+	{
+		cancion = true;
+		lista_existente.bubble_sort_cancion(cancion);
+	}
+	list_muestreo->Items->Clear();
+		
+		for (int i = 0; i < lista_existente.Count(); i++)
+		{
+			list_muestreo->Items->Add(gcnew String(lista_existente.Get(i).c_str()));
+		}
 }
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 	string original = "";
@@ -383,6 +404,41 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 	{
 		list_muestreo->Items->Add(gcnew String(lista_existente.Get(i).c_str()));
 	}
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (artista==true)
+	{
+		artista = false;
+		lista_existente.bubble_sort_artista(artista);
+	}
+	else
+	{
+		artista = true;
+		lista_existente.bubble_sort_artista(artista);
+	}
+	list_muestreo->Items->Clear();
+
+	for (int i = 0; i < lista_existente.Count(); i++)
+	{
+		list_muestreo->Items->Add(gcnew String(lista_existente.Get(i).c_str()));
+	}
+}
+private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
+	string exportar = "";
+	for (int i = 0; i < lista_existente.Count(); i++)
+	{
+		if (i==lista_existente.Count()-1)
+		{
+			exportar += lista_existente.Get(i) + ";";
+		}
+		else
+		{
+			exportar += lista_existente.Get(i) + ",";
+		}
+	}
+	std::ofstream myfile;
+	myfile.open("playlist.csv");
+	myfile << exportar;
 }
 };
 }

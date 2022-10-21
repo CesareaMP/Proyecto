@@ -7,7 +7,9 @@ class LIST
 	{
 		string cancion;
 		string artista;
-		Nodeli* next;
+		Nodeli* next;	
+		double valor_cancion;
+		double valor_artista;
 	};
 
 public:
@@ -16,6 +18,8 @@ public:
 	int Count();
 	void delete_last();
 	void delete_list();
+	void bubble_sort_cancion(bool);
+	void bubble_sort_artista(bool);
 private:
 	Nodeli* header = nullptr;
 };
